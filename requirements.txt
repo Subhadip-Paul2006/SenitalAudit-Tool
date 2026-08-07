@@ -1,0 +1,10 @@
+psutil>=5.9,<6.0
+WMI>=1.5,<2.0
+pywin32>=306
+rich>=13.0,<14.0
+tabulate>=0.9,<1.0
+pandas>=2.0,<3.0
+reportlab>=4.0,<5.0
+PyYAML>=6.0,<7.0
+colorama>=0.4.6
+# Optional: python-nmap (only if you extend port scanning to real nmap)

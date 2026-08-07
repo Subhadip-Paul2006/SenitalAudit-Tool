@@ -1,0 +1,93 @@
+# SentinelAudit configuration — thresholds, lists, weights.
+
+risky_services:
+  - TlntSvr          # Telnet
+  - FTPSVC           # FTP
+  - RemoteRegistry   # Remote Registry
+  - TermService      # RDP
+  - SNMP             # SNMP
+  - simptcp          # Simple TCP/IP services
+  - LanmanServer     # SMB file server (flag only as info)
+  - WinRM            # Windows Remote Management
+
+port_service_map:
+  21: FTP
+  22: SSH
+  23: Telnet
+  80: HTTP
+  135: RPC
+  139: NetBIOS
+  445: SMB
+  1433: MSSQL
+  3306: MySQL
+  3389: RDP
+  5985: WinRM-HTTP
+  5986: WinRM-HTTPS
+
+# severity per open port
+port_severity:
+  23: high     # Telnet
+  21: medium   # FTP
+  3389: medium # RDP
+  445: low
+  139: low
+  135: info
+
+scoring:
+  base: 100
+  bands:
+    excellent: 90
+    good: 75
+    fair: 50
+  # weight multipliers per module (1.0 = use score_impact as-is)
+  weights:
+    firewall: 1.0
+    defender: 1.5
+    services: 1.0
+    ports: 1.0
+    users: 1.2
+    password_policy: 1.0
+    startup: 0.5
+    software: 0.3
+    usb: 0.0
+    registry: 1.2
+    updates: 1.0
+    eventlogs: 1.3
+    tasks: 0.5
+
+password_policy:
+  min_length_threshold: 8
+  max_age_days_threshold: 90
+
+defender:
+  signature_age_warning_days: 7
+
+updates:
+  stale_days_threshold: 30
+
+eventlogs:
+  window_hours: 24
+  failed_logon_spike_threshold: 10
+
+startup:
+  trusted_dirs:
+    - "C:\\Program Files"
+    - "C:\\Program Files (x86)"
+    - "C:\\Windows"
+
+usb:
+  flag_mass_storage: false
+
+reports:
+  output_dir: "reports"
+  pdf_name: "audit.pdf"
+  html_name: "audit.html"
+  json_name: "audit.json"
+
+database:
+  path: "database/history.db"
+
+logging:
+  dir: "logs"
+  file: "sentinelaudit.log"
+  level: "INFO"
