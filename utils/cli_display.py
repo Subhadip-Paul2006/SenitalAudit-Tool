@@ -9,6 +9,16 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
+import sys
+
+if sys.platform == "win32":
+    try:
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        if hasattr(sys.stderr, "reconfigure"):
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 console = Console(legacy_windows=False, _environ={"PYTHONIOENCODING": "utf-8"})
 
@@ -47,6 +57,33 @@ def progress_run(items: Iterable[str]):
             return False
 
     return _Runner()
+
+
+BANNER_BLOCK = r"""[bold #FF8700]
+  ██████╗ ███████╗███╗   ██╗████████╗██╗███╗   ██╗███████╗██╗      █████╗ ██╗   ██╗██████╗ ████████╗
+ ██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██║████╗  ██║██╔════╝██║     ██╔══██╗██║   ██║██╔══██╗╚══██╔══╝
+ ╚█████╗  █████╗  ██╔██╗ ██║   ██║   ██║██╔██╗ ██║█████╗  ██║     ███████║██║   ██║██║  ██║   ██║   
+  ╚═══██╗ ██╔══╝  ██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║     ██╔══██║██║   ██║██║  ██║   ██║   
+ ██████╔╝ ███████╗██║ ╚████║   ██║   ██║██║ ╚████║███████╗███████╗██║  ██║╚██████╔╝██████╔╝   ██║   
+ ╚═════╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝    ╚═╝   
+[/bold #FF8700]"""
+
+BANNER_ASCII = r"""[bold #FF8700]
+  ____  ____ _  _ _____ _ _  _ ____ _    ____ _  _ ___  _ _____ 
+  [__   |___ |\ |   |   | |\ | |___ |    |__| |  | |  \ |   |   
+  ___]  |___ | \|   |   | | \| |___ |___ |  | |__| |__/ |   |   
+[/bold #FF8700]"""
+
+
+def render_banner() -> None:
+    """Render the top orange ASCII banner when CLI starts."""
+    try:
+        console.print(BANNER_BLOCK)
+    except Exception:
+        try:
+            console.print(BANNER_ASCII)
+        except Exception:
+            console.print("[bold #FF8700]=== SENTINELAUDIT ===[/bold #FF8700]")
 
 
 def render_dashboard(system_info: dict[str, Any],

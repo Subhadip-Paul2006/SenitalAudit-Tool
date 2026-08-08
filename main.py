@@ -83,6 +83,8 @@ def main(argv: list[str] | None = None) -> int:
                   f"score={r['score']:>3}  {r['band']}")
         return 0
 
+    cli_display.render_banner()
+
     if not args.no_admin_check:
         elevation.ensure_admin(interactive=True)
     elif not elevation.is_admin():
