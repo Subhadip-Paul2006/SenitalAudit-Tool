@@ -125,6 +125,55 @@ SentinelAudit returns standard status codes suitable for CI/CD and scripting:
 
 ---
 
+## How to Test the Tool
+
+You can test SentinelAudit using the following test verification scenarios:
+
+### 1. Fast Functional Test (Quick Mode)
+Verify that imports, CLI styling, scoring engine, and light modules run cleanly without errors:
+```powershell
+python main.py --quick
+```
+*Expected Result*: Completes in 2–5 seconds with a rendered CLI dashboard showing module status and security score.
+
+### 2. Full Audit & Report Generation Test
+Test all 13 audit modules and export reports:
+```powershell
+python main.py --export pdf,html,json
+```
+*Expected Result*:
+- `reports/audit.pdf` is created.
+- `reports/audit.html` is created.
+- `reports/audit.json` is created with valid JSON structure.
+
+### 3. Graceful Non-Admin Test
+Test how the tool handles running without elevated administrator rights:
+```powershell
+python main.py --no-admin-check
+```
+*Expected Result*: System outputs warning regarding non-admin privileges, and modules degrade gracefully without crashing.
+
+### 4. History Tracking & Diff Test
+Run two audits back-to-back and compare findings:
+```powershell
+# View saved history
+python main.py --list-history
+
+# Compare latest run against previous run
+python main.py --compare-last
+```
+*Expected Result*: Displays run IDs, timestamps, and a comparison table showing score delta and new/resolved security findings.
+
+### 5. Scripting Exit Code Test
+Test the exit status return code in PowerShell:
+```powershell
+python main.py --quick
+echo $LASTEXITCODE
+```
+*Expected Result*: Prints `0`, `1`, or `2` depending on the system security score band.
+
+---
+
 ## Audit Modules Breakdown
 
 | Module | Source / Mechanism | Description & Triggers |
