@@ -33,8 +33,8 @@ cd path\to\SentinelAudit
 
 ---
 
-### Step 3: Set Up Python Virtual Environment (Recommended)
-Creating an isolated virtual environment ensures clean dependency management:
+### Step 3: Set Up Python Virtual Environment (Optional, Recommended)
+Creating an isolated virtual environment ensures clean dependency management, but **you can skip this step** if you prefer installing dependencies directly into your global Python setup:
 
 ```powershell
 # 1. Create a virtual environment named 'venv'
